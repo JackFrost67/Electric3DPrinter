@@ -430,7 +430,7 @@ void FindBoundary()
 		{
 			if(OnBoundary(x, y, z))
 			{
-				if(boundaryCount >= maxBoundary)
+				if(boundaryCount > maxBoundary)
 				{
 					cout << "Maximum boundary node count (Q0) exceeded!" << endl;
 					return;
@@ -506,7 +506,7 @@ void Initialise()
 }
 
 
-// Set the boundary conditions and initialise one solution with potentials applied at at z.
+// Set the boundary conditions and initialise one solution with potentials applied at z.
 // b is the index into the boundary array that decides how far round the circle voltages will
 // be applied.  v is the potential.
 
@@ -539,7 +539,7 @@ void BoundaryConditions(const int b, const int z, const double v)
 
 
 
-	//double angle = atan2(yCentre - source[0][1], xCentre - source[0][0]);
+	//	double angle = atan2(yCentre - source[0][1], xCentre - source[0][0]);
 	//	potential[source[0][0]][source[0][1]] = 2.0 + sin(4.0*angle);
 	//	potential[source[1][0]][source[1][1]] = 2.0 + sin(4.0*angle + M_PI);
 	//	source[0][0] = xc + round((double)(radius - 1)*cos(angle));
@@ -691,7 +691,7 @@ void TestBoundary()
 		for(int y = 0; y <= nodes ; y++)
 			inside[x][y][z] = true;
 	}
-	potential[1][1][z] = 0.5;
+
 	for(int x = 0; x < boundaryCount; x++)
 	{
 		potential[boundaryNodes[x][0]][boundaryNodes[x][1]][z] += 1;
@@ -782,40 +782,40 @@ int main()
 	struct timespec t_start, t_end;
 	clock_gettime(CLOCK_MONOTONIC, &t_start);
 
-	//	TestBoundary();
-	//  TestCylinder(15, 10, 40);
+	TestBoundary();
+	TestCylinder(15, 10, 40);
 
 
-	BoundaryConditions(0, nodes/2, 1.0);
+	// BoundaryConditions(0, nodes/2, 1.0);
 
 
-	//for(int vv = 1; vv < 21; vv++)
-	//{
-	//int vv = 3;
-		ChargeSetUp();
-		//cout << "Z for " << vv << " volts: ";
-		for(int z = 1; z < nodes; z++)
-		{
-			cout << z << ' ';
-			cout.flush();
+	// //for(int vv = 1; vv < 21; vv++)
+	// //{
+	// //int vv = 3;
+	// 	ChargeSetUp();
+	// 	//cout << "Z for " << vv << " volts: ";
+	// 	for(int z = 1; z < nodes; z++)
+	// 	{
+	// 		cout << z << ' ';
+	// 		cout.flush();
 
-			double v = 1.0;
+	// 		double v = 1.0;
 
-			for(int angle = 0; angle < boundaryCount/2; angle++)
-			{
-				BoundaryConditions(angle, z, v);
-				GausSeidelIteration();
-				GradientMagnitudes();
-			}
-		}
-		cout << endl;
-		SigmoidCharge(0.0, 50);
-		string fileName = "rectangleAttemptParallel.tns";
-		//char str[20];
-		//sprintf(str,"-%d.tns",vv);
-		//fileName += str;
-		OutputTensor(fileName.c_str(), thresholdedChargeIntegral);
-	//}
+	// 		for(int angle = 0; angle < boundaryCount/2; angle++)
+	// 		{
+	// 			BoundaryConditions(angle, z, v);
+	// 			GausSeidelIteration();
+	// 			GradientMagnitudes();
+	// 		}
+	// 	}
+	// 	cout << endl;
+	// 	SigmoidCharge(0.0, 50);
+	// 	string fileName = "rectangleAttemptParallel.tns";
+	// 	//char str[20];
+	// 	//sprintf(str,"-%d.tns",vv);
+	// 	//fileName += str;
+	// 	OutputTensor(fileName.c_str(), thresholdedChargeIntegral);
+	// //}
 
 //	Output("potential.dat", potential, -1, nodes/2);
 //	Output("field.dat", field, -1, nodes/2);
